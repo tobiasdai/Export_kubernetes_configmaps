@@ -21,5 +21,5 @@ mkdir $EXPORT_DIRECTORY
 kubectl get service | sed '1d' | gawk '{print $1}'> $SERVICEFILE
 while read service
 do
-kubectl get service $service -o yaml --export ||  "$EXPORT_DIRECTORY"/"$service".yaml
+kubectl get service $service -o yaml --export >  "$EXPORT_DIRECTORY"/"$service".yaml
 done < $SERVICEFILE
