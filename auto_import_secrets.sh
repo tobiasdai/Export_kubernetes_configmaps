@@ -16,4 +16,4 @@ fi
 while read secret
 do 
 kubectl apply -f "$IMPORT_DIRECTORY"/"$secret".yaml
-done < $CONFIGFILE
+done < $SECRETFILE
