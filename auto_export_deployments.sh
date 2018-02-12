@@ -6,18 +6,20 @@ set -x
 # deployments的导出的路径
 
 EXPORT_DIRECTORY="./export_deployments"
-# 储存configmaps的key的文件名
-CONFIGFILE=deployment_list
+# 储存deployments的key的文件名
+DEPLOYMENTFILE=deployment_list
 
+if [ -d $EXPORT_DIRECTORY ]
+then
+rm -rf $EXPORT_DIRECTORY
+fi
 
-# 储存导出的configs的文件夹
+# 储存导出的deployments的文件夹
 mkdir $EXPORT_DIRECTORY
 
-# 处理configmaps输出字段，保留所有的key, 按行分割
-kubectl get configmaps > configmaps
-sed -i '1d' configmaps | gawk '{print $1}' configmaps > $CONFIGFILE
-
-while read config
+# 处理get deployment输出字段，保留所有的服务名, 按行分割
+kubectl get deployment | sed '1d' | gawk '{print $1}'> $DEPLOYMENTFILE
+while read deployment
 do
-kubectl get configmap $config -o yaml > "$EXPORT_DIRECTORY"/"$config".yaml
-done < $CONFIGFILE
+kubectl get deployment $deployment -o yaml > "$EXPORT_DIRECTORY"/"$deployment".yaml
+done < $DEPLOYMENTFILE
