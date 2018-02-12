@@ -7,7 +7,7 @@ set -x
 
 EXPORT_DIRECTORY="./export_secrets"
 # 储存secrets的key的文件名
-CONFIGFILE=secret_list
+SECRETFIGFILE=secret_list
 
 if [ -d $EXPORT_DIRECTORY ]
 then
@@ -19,10 +19,10 @@ fi
 mkdir $EXPORT_DIRECTORY
 
 # 处理secrets输出字段，保留所有的key, 按行分割
-kubectl get secret | sed '1d' | gawk '{print $1}' > $CONFIGFILE
+kubectl get secret | sed '1d' | gawk '{print $1}' > $SECRETFIGFILE
 
 while read secret
 do 
 kubectl get secret $secret -o yaml --export > "$EXPORT_DIRECTORY"/"$secret".yaml
-done < $CONFIGFILE
+done < $SECRETFIGFILE
 
