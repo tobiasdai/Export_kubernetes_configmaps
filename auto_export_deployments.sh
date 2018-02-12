@@ -21,5 +21,5 @@ mkdir $EXPORT_DIRECTORY
 kubectl get deployment | sed '1d' | gawk '{print $1}'> $DEPLOYMENTFILE
 while read deployment
 do
-kubectl get deployment $deployment -o yaml > "$EXPORT_DIRECTORY"/"$deployment".yaml
+kubectl get deployment $deployment -o yaml --export > "$EXPORT_DIRECTORY"/"$deployment".yaml
 done < $DEPLOYMENTFILE

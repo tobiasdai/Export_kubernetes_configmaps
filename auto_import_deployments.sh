@@ -1,27 +1,19 @@
 #!/bin/bash
-# 自动导入configmap配置 可以添加路径参数，实现高灵活度
+# 自动导入deployments配置 可以添加路径参数，实现高灵活度
 
 set -x
 
-# configmaps的导出的路径
+# deployments的导入的路径
+IMPORT_DIRECTORY="./export_deployments"
+# 储存deployment的key的文件名
+DEPLOYMENTFILE=deployment_list
 
-EXPORT_DIRECTORY="./export_configs"
-# 储存configmaps的key的文件名
-CONFIGFILE=config_list
-
-if [ -d $EXPORT_DIRECTORY ]
+if [ ! -d $IMPORT_DIRECTORY ]
 then
 exit 1
 fi
 
-
-# 储存导出的configs的文件夹
-mkdir $EXPORT_DIRECTORY
-
-# 处理configmaps输出字段，保留所有的key, 按行分割
-kubectl get configmaps | sed '1d' | gawk '{print $1}' > $CONFIGFILE
-
-while read config
+while read deployment
 do 
-kubectl get configmap $config -o yaml > "$EXPORT_DIRECTORY"/"$config".yaml
-done < $CONFIGFILE
+kubectl apply -f "$IMPORT_DIRECTORY"/"$deployment".yaml
+done < $DEPLOYMENTFILE

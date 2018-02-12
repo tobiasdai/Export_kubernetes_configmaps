@@ -23,7 +23,7 @@ kubectl get configmaps | sed '1d' | gawk '{print $1}' > $CONFIGFILE
 
 while read config
 do 
-kubectl get configmap $config -o yaml > "$EXPORT_DIRECTORY"/"$config".yaml
+kubectl get configmap $config -o yaml --export > "$EXPORT_DIRECTORY"/"$config".yaml
 done < $CONFIGFILE
 
 
